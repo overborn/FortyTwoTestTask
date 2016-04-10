@@ -1,0 +1,20 @@
+[
+{
+    "pk": 1, 
+    "model": "auth.user", 
+    "fields": {
+        "username": "admin", 
+        "first_name": "", 
+        "last_name": "", 
+        "is_active": true, 
+        "is_superuser": true, 
+        "is_staff": true, 
+        "last_login": "2016-04-10T12:46:31.639Z", 
+        "groups": [], 
+        "user_permissions": [], 
+        "password": "pbkdf2_sha256$12000$Fc568edhC45D$yZdbnp5m/T2Ie5RM596KYvbzP13JzqWzysfLJCrU0PM=", 
+        "email": "forkirill@i.ua", 
+        "date_joined": "2016-04-10T12:46:31.639Z"
+    }
+}
+]
