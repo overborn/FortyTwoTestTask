@@ -15,13 +15,13 @@
 		      <label for="" class="">First name</label>
 		   </div>
 			<div class="col-md-4 col-xs-6">
-			   Kyrylo
+			   {{ person.first_name }}
 		   </div>
 			<div class="col-md-2 col-xs-6">
 		      <label for="" class="">Email</label>
 		   </div>
 			<div class="col-md-4 col-xs-6">
-			   forkirill@i.ua
+			   {{ person.email }}
 		   </div>
 	   </div>
 	   <div class="row">
@@ -29,13 +29,13 @@
 		      <label for="" class="">Last name</label>
 		   </div>
 			<div class="col-md-4 col-xs-6">
-			   Budko
+			   {{ person.last_name }}
 		   </div>
 			<div class="col-md-2 col-xs-6">
 		      <label for="" class="">Jabber</label>
 		   </div>
 			<div class="col-md-4 col-xs-6">
-			   overborn@42cc.co
+			   {{ person.jabber }}
 		   </div>
 	   </div>
 	   <div class="row">
@@ -43,13 +43,13 @@
 		      <label for="" class="">Date of birth</label>
 		   </div>
 			<div class="col-md-4 col-xs-6">
-			   1992-05-13
+			   {{ person.date_of_birth|date:"Y-m-d" }}
 		   </div>
 			<div class="col-md-2 col-xs-6">
 		      <label for="" class="">Skype</label>
 		   </div>
 			<div class="col-md-4 col-xs-6">
-			   kyrylo.budko
+			   {{ person.skype }}
 		   </div>
 	   </div>
 	   <div class="row">
@@ -57,15 +57,13 @@
 		      <label for="" class="">Bio</label>
 		   </div>
 			<div class="col-md-4 col-xs-6">
-			   2015 - present: Programmer Analyst at Alfa Bank<br/>
-				2012 - 2015: Teacher of Economics at "Leader" lyceum<br/>
-				2009 - 2013: Bachelor's degree in Economic Cybernetics at Taras Shevchenko National Univercity of Kyiv
+			   {{ person.bio|safe|linebreaks}}
 		   </div>
 			<div class="col-md-2 col-xs-6">
 		      <label for="" class="">Other contacts</label>
 		   </div>
 			<div class="col-md-4 col-xs-6">
-			   phone: +380937123775
+			   {{ person.other_contacts|linebreaks }}
 		   </div>
 	   </div>
 	</div>
