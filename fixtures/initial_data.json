@@ -16,5 +16,19 @@
         "email": "forkirill@i.ua", 
         "date_joined": "2016-04-10T12:46:31.639Z"
     }
+},
+{
+    "pk": 1, 
+    "model": "t1_contact.person", 
+    "fields": {
+        "bio": "2015 - present: Programmer Analyst at Alfa Bank\r\n2012 - 2015: Teacher of Economics at \"Leader\" lyceum\r\n2009 - 2013: Bachelor's degree in Economic Cybernetics at\r\nTaras Shevchenko National Univercity of Kyiv",
+        "first_name": "Kyrylo",
+        "last_name": "Budko",
+        "other_contacts": "phone: +380937123775",
+        "date_of_birth": "1992-05-13",
+        "skype": "kyrylo.budko",
+        "jabber": "overborn@42cc.co",
+        "email": "forkirill@i.ua"
+    }
 }
 ]

@@ -5,10 +5,10 @@ from t1_contact.models import Person
 
 
 PERSON = {
-    "bio": """2015 - present: Programmer Analyst at Alfa Bank\r\n
-        2012 - 2015: Teacher of Economics at \"Leader\" lyceum\r\n
-        2009 - 2013: Bachelor's degree in Economic Cybernetics at\r\n
-        Taras Shevchenko National Univercity of Kyiv""",
+    "bio": """2015 - present: Programmer Analyst at Alfa Bank\r
+2012 - 2015: Teacher of Economics at "Leader" lyceum\r
+2009 - 2013: Bachelor's degree in Economic Cybernetics at\r
+Taras Shevchenko National Univercity of Kyiv""",
     "first_name": "Kyrylo",
     "last_name": "Budko",
     "other_contacts": "phone: +380937123775",
@@ -72,7 +72,7 @@ class ModelTests(TestCase):
         """
         person = Person.objects.get(pk=1)
         for key, value in self.person.iteritems():
-            self.assertEqual(value, getattr(person, key))
+            self.assertEqual(value, str(getattr(person, key)))
 
 
 class ModelViewTests(TestCase):
