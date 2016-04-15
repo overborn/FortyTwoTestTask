@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'south',
 
     'apps.t1_contact',
+    'apps.t3_requests'
 )
 
 MIDDLEWARE_CLASSES = (
