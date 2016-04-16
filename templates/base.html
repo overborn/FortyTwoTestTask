@@ -18,6 +18,21 @@
 
     </head>
     <body id="{% block body_id %}{% endblock %}" class="{% block body_class %}{% endblock %}">
-        {% block content %}{% endblock content %}
+        <nav class="navbar navbar-default navbar-static-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <a href="{% url 'index' %}" class="navbar-brand">Coffee cups test assignment</a> 
+                </div>
+            </div>
+        </nav>
+        <div class="container">
+            {% block content %}{% endblock content %}
+        </div>
+        <hr/>
+        <div class="container">
+            {% block footer %}            
+                <a href="{% url 'requests' %}">requests</a>
+            {% endblock %}
+        </div>
     </body>
 </html>
