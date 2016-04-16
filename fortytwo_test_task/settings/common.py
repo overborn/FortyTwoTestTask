@@ -45,7 +45,7 @@ INSTALLED_APPS = (
     'south',
 
     'apps.t1_contact',
-    'apps.t3_requests'
+    'apps.t3_requests',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -55,6 +55,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    't3_requests.middleware.RequestSaver',
 )
 
 ROOT_URLCONF = 'fortytwo_test_task.urls'
@@ -134,3 +136,6 @@ FIXTURE_DIRS = (
 
 # Turn off south during test
 SOUTH_TESTS_MIGRATE = False
+
+# Turn off to disable request saving
+ENABLE_REQUEST_SAVING = True
