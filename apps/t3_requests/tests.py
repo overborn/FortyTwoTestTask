@@ -1,10 +1,13 @@
 from django.core.urlresolvers import reverse
 from django.test import TestCase
+from django.test.utils import override_settings
 from t3_requests.models import Request
 from bs4 import BeautifulSoup
+import json
 
 
-class RequestTests(TestCase):
+@override_settings(ENABLE_REQUEST_SAVING=True)
+class RequestSaverTests(TestCase):
     def test_request_creates_request_object(self):
         '''
         checks if http requests are saved
@@ -40,3 +43,37 @@ class RequestTests(TestCase):
         last_requests = Request.objects.order_by('-created')[:10]
         for req in last_requests:
             self.assertContains(response, str(req))
+
+    def test_https_requests_are_not_saved(self):
+        """
+        checks if https requests are not saved
+        """
+        self.assertFalse(Request.objects.exists())
+        self.client.get('/', **{'wsgi.url_scheme': 'https'})
+        self.assertFalse(Request.objects.exists())
+
+    def test_ajax_request_for_last_requests_is_not_saved(self):
+        """
+        checks if 'ajax_requests' ajax call is not saved
+        """
+        self.assertFalse(Request.objects.exists())
+        self.client.get(
+            reverse('ajax_requests'),
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest'
+        )
+        self.assertFalse(Request.objects.exists())
+
+    def test_ajax_request_returns_last_requests(self):
+        """
+        checks if ajax request returns last requests
+        """
+        for i in range(10):
+            self.client.get('/path/', {'query': i})
+        response = self.client.get(
+            reverse('ajax_requests'),
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+        )
+        data = json.loads(response.content)
+        requests = Request.objects.order_by('-created')[:10]
+        for req, request in zip(requests, data['requests']):
+            self.assertEqual(request['string'], str(req))
