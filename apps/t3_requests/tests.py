@@ -1,11 +1,13 @@
 from django.core.urlresolvers import reverse
 from django.test import TestCase
+from django.test.utils import override_settings
 from t3_requests.models import Request
 from bs4 import BeautifulSoup
 import json
 
 
-class RequestTests(TestCase):
+@override_settings(ENABLE_REQUEST_SAVING=True)
+class RequestSaverTests(TestCase):
     def test_request_creates_request_object(self):
         '''
         checks if http requests are saved
@@ -42,9 +44,17 @@ class RequestTests(TestCase):
         for req in last_requests:
             self.assertContains(response, str(req))
 
+    def test_https_requests_are_not_saved(self):
+        """
+        checks if https requests are not saved
+        """
+        self.assertFalse(Request.objects.exists())
+        self.client.get('/', **{'wsgi.url_scheme': 'https'})
+        self.assertFalse(Request.objects.exists())
+
     def test_ajax_request_for_last_requests_is_not_saved(self):
         """
-        checks if ajax_requests is not in db
+        checks if 'ajax_requests' ajax call is not saved
         """
         self.assertFalse(Request.objects.exists())
         self.client.get(

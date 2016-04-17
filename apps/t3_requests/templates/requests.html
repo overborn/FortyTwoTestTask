@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
 
 {% block title %}Last requests{% endblock title %}
 
@@ -8,9 +9,14 @@
 		{% for req in requests %}
 			{# <p>{{ forloop.counter}}. [{{ req.created|date:"Y-m-d H:i:s" }}] {{ req.method }}: {{ req.path }} {{ req.query }}</p> #}
 			<p>{{ forloop.counter}}. {{ req }}</p>
+			<input type="hidden" value="{{ req.id }}">
 		{% endfor %}
 	</div>
+
 {% endblock %}
 {% block footer %}
 	<a href="{% url 'index' %}">index</a>
+{% endblock %}
+{% block scripts %}
+	<script src='{% static "js/requests.js" %}'></script>
 {% endblock %}
