@@ -69,3 +69,16 @@ class EditFormTests(TestCase):
         person = Person.objects.get(pk=1)
         self.assertNotEqual(person.first_name, old_name)
         self.assertEqual(person.first_name, "name")
+
+
+class DatepickerTests(TestCase):
+    fixtures = ['initial_data.json']
+
+    def test_view_contains_proper_static(self):
+        """
+        checks if static files for displaying datepicker are in view
+        """
+        response = self.client.get(reverse('edit'))
+        self.assertContains(response, "js/jquery-ui.js")
+        self.assertContains(response, "js/datepicker.js")
+        self.assertContains(response, "css/jquery-ui.css")

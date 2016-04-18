@@ -1,0 +1,33 @@
+from django.core.urlresolvers import reverse
+from django.forms import ModelForm
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Div, Layout, HTML
+from t1_contact.models import Person
+from t5_edit.widgets import Datepicker
+
+
+class PersonForm(ModelForm):
+    class Meta:
+        model = Person
+        widgets = {
+            'date_of_birth': Datepicker
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(PersonForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        div1 = ('first_name', 'last_name', 'date_of_birth', 'bio')
+        div2 = ('email', 'skype', 'jabber', 'other_contacts')
+        self.helper.layout = Layout(
+            Div(
+                Div(*div1, css_class='col-md-6 col-xs-12'),
+                Div(*div2, css_class='col-md-6 col-xs-12'),
+                css_class='row'
+            ),
+            HTML('''
+                <input type="submit" class="btn btn-primary" value="Save">
+                <a href="{% url 'index' %}" class="btn btn-default">cancel</a>
+                ''')
+        )
+        self.helper.form_action = reverse('edit')
+        self.helper.form_id = 'personForm'

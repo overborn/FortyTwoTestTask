@@ -23,6 +23,13 @@
                 <div class="navbar-header">
                     <a href="{% url 'index' %}" class="navbar-brand">Coffee cups test assignment</a> 
                 </div>
+                            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="{% url 'edit' %}">edit</a>
+                    </li>
+                </ul>
+            </div>
             </div>
         </nav>
         <div class="container">
@@ -35,7 +42,7 @@
             {% endblock %}
         </div>
     </body>
-    <script src='{% static "js/jquery-1.10.2.js" %}'></script>
-    {% block scripts %}        
+    {% block scripts %}
+        <script src='{% static "js/jquery-1.10.2.js" %}'></script>      
     {% endblock %}
 </html>

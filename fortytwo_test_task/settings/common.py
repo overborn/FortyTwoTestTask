@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
     'south',
+    'crispy_forms',
 
     'apps.t1_contact',
     'apps.t3_requests',
@@ -136,3 +137,5 @@ SOUTH_TESTS_MIGRATE = False
 
 # Turn off to disable request saving
 ENABLE_REQUEST_SAVING = True
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'

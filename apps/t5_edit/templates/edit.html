@@ -1,70 +1,13 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
 {% block content %}
 
-<form action="/edit/" id="personForm" method="post">
-    <div class="row">
-        <div class="col-md-6 col-xs-12">
-            <div id="div_id_first_name" class="form-group">
-                <label for="id_first_name" class="control-label  requiredField">
-                    First name<span class="asteriskField">*</span> </label>
-                <div class="controls ">
-                    <input class="textinput textInput form-control" id="id_first_name" maxlength="30" name="first_name" type="text" value="Kyrylo" /> </div>
-            </div>
-            <div id="div_id_last_name" class="form-group">
-                <label for="id_last_name" class="control-label  requiredField">
-                    Last name<span class="asteriskField">*</span> </label>
-                <div class="controls ">
-                    <input class="textinput textInput form-control" id="id_last_name" maxlength="30" name="last_name" type="text" value="Budko" /> </div>
-            </div>
-            <div id="div_id_date_of_birth" class="form-group">
-                <label for="id_date_of_birth" class="control-label ">
-                    Date of birth
-                </label>
-                <div class="controls ">
-                    <input class="datepicker form-control" id="id_date_of_birth" name="date_of_birth" style="position: relative; z-index: 1000;" type="text" value="1992-05-13" /> </div>
-            </div>
-            <div id="div_id_bio" class="form-group">
-                <label for="id_bio" class="control-label ">
-                    Bio
-                </label>
-                <div class="controls ">
-                    <textarea class="textarea form-control" cols="40" id="id_bio" name="bio" rows="10">2015 - present: Programmer Analyst at Alfa Bank 2012 - 2015: Teacher of Economics at &quot;Leader&quot; lyceum 2009 - 2013: Bachelor&#39;s degree in Economic Cybernetics at Taras Shevchenko National Univercity of Kyiv</textarea>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 col-xs-12">
-            <div id="div_id_email" class="form-group">
-                <label for="id_email" class="control-label  requiredField">
-                    Email<span class="asteriskField">*</span> </label>
-                <div class="controls ">
-                    <input class="emailinput form-control" id="id_email" maxlength="75" name="email" type="email" value="forkirill@i.ua" /> </div>
-            </div>
-            <div id="div_id_skype" class="form-group">
-                <label for="id_skype" class="control-label  requiredField">
-                    Skype<span class="asteriskField">*</span> </label>
-                <div class="controls ">
-                    <input class="textinput textInput form-control" id="id_skype" maxlength="30" name="skype" type="text" value="kyrylo.budko" /> </div>
-            </div>
-            <div id="div_id_jabber" class="form-group">
-                <label for="id_jabber" class="control-label ">
-                    Jabber
-                </label>
-                <div class="controls ">
-                    <input class="textinput textInput form-control" id="id_jabber" maxlength="30" name="jabber" type="text" value="overborn@42cc.co" /> </div>
-            </div>
-            <div id="div_id_other_contacts" class="form-group">
-                <label for="id_other_contacts" class="control-label ">
-                    Other contacts
-                </label>
-                <div class="controls ">
-                    <textarea class="textarea form-control" cols="40" id="id_other_contacts" name="other_contacts" rows="10">phone: +380937123775</textarea>
-                </div>
-            </div>
-        </div>
-    </div>
-    <input type="submit" class="btn btn-primary" value="Save">
-    <a href="/">cancel</a>
-</form>
 
+{% crispy form %}
 
+{% endblock %}
+
+{% block scripts %}
+	<script src='{% static "js/datepicker.js" %}'></script>  
 {% endblock %}

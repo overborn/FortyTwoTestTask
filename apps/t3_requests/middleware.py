@@ -13,3 +13,4 @@ class RequestSaver(object):
                         path=request.path,
                         query=request.META.get('QUERY_STRING', '?'))
                     req.save()
+        pass
