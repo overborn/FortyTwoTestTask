@@ -1,3 +1,4 @@
 from django.contrib import admin
+from t3_requests.models import Request
 
-# Register your models here.
+admin.site.register(Request)
