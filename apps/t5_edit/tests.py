@@ -1,7 +1,7 @@
+import tempfile
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from t1_contact.models import Person
-
 
 PERSON = {
     "bio": """2015 - present: Programmer Analyst at Alfa Bank\r
@@ -82,3 +82,29 @@ class DatepickerTests(TestCase):
         self.assertContains(response, "js/jquery-ui.js")
         self.assertContains(response, "js/datepicker.js")
         self.assertContains(response, "css/jquery-ui.css")
+
+
+class PhotoTests(TestCase):
+    fixtures = ['initial_data.json']
+
+    def setUp(self):
+        self.person = PERSON
+
+    def test_photo_is_rendered_when_added(self):
+        """
+        checks if photo is rendered in index and edit views when added to model
+        """
+        response = self.client.get(reverse('index'))
+        self.assertContains(response, 'No photo yet')
+        self.assertNotContains(response, 'test.png')
+
+        response = self.client.get(reverse('edit'))
+        self.assertNotContains(response, 'test.png')
+
+        person = Person.objects.get(pk=1)
+        person.photo = tempfile.NamedTemporaryFile(suffix="test.png").name
+        person.save()
+
+        response = self.client.get(reverse('index'))
+        self.assertNotContains(response, 'No photo yet')
+        self.assertContains(response, 'test.png')
