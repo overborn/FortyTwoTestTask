@@ -5,6 +5,12 @@ from crispy_forms.layout import Div, Layout, HTML
 from t1_contact.models import Person
 from t5_edit.widgets import Datepicker
 
+PHOTO_HTML = '''
+{% if form.photo.value %}
+    <img src="{{ MEDIA_URL }}{{ form.photo.value }}">
+{% endif %}
+'''
+
 
 class PersonForm(ModelForm):
     class Meta:
@@ -16,8 +22,12 @@ class PersonForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(PersonForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
-        div1 = ('first_name', 'last_name', 'date_of_birth', 'bio')
-        div2 = ('email', 'skype', 'jabber', 'other_contacts')
+        photo_layout = Layout(
+            'photo',
+            HTML(PHOTO_HTML)
+        )
+        div1 = ('first_name', 'last_name', 'date_of_birth', photo_layout)
+        div2 = ('email', 'skype', 'jabber', 'other_contacts', 'bio')
         self.helper.layout = Layout(
             Div(
                 Div(*div1, css_class='col-md-6 col-xs-12'),

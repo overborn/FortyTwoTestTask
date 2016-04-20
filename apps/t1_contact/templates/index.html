@@ -46,18 +46,20 @@
 			   {{ person.skype }}
 		   </div>
 	   </div>
-	   <div class="row">
-			<div class="col-md-2 col-xs-6">
-		      <label for="" class="">Bio</label>
-		   </div>
-			<div class="col-md-4 col-xs-6">
-			   {{ person.bio|safe|linebreaks}}
-		   </div>
-			<div class="col-md-2 col-xs-6">
-		      <label for="" class="">Other contacts</label>
-		   </div>
-			<div class="col-md-4 col-xs-6">
-			   {{ person.other_contacts|linebreaks }}
-		   </div>
+   	   <div class="row">
+		   	<div class="col-md-6 col-xs-12">
+			   	<label for="" class="">Photo</label><br/>	
+			   	{% if person.photo %}		   			   		
+			   		<img src="{{ MEDIA_URL }}{{ person.photo }}"/>		   	
+			   	{% else %}
+				   	<p>No photo yet</p>
+			   	{% endif %}
+		   	</div>
+		   	<div class="col-md-6 col-xs-12">
+			   	<label for="" class="">Other contacts</label>
+			   	{{ person.other_contacts|linebreaks }}
+		   		<label for="" class="">Bio</label>
+		   		{{ person.bio|safe|linebreaks}}
+		   	</div>
 	   </div>
 {% endblock content %}
