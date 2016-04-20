@@ -11,6 +11,5 @@ urlpatterns = patterns(
     url("", include('t1_contact.urls')),
     url("", include('t3_requests.urls')),
     url("", include('t5_edit.urls')),
-
     url(r'^admin/', include(admin.site.urls)),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
