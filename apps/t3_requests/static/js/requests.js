@@ -1,5 +1,6 @@
 $(function(){
-	var NEW_REQUESTS = 0;
+	var NEW_REQUESTS = 0,
+		FOCUSED = true;
 	setInterval(function(){
 	    $.ajax({
 	    	url: "/ajax_requests",
@@ -22,20 +23,25 @@ $(function(){
 		        	$(this).text(text);
 		        });
 		        var title = $('title').text();
-		        if (NEW_REQUESTS) {
+		        if (NEW_REQUESTS && !FOCUSED) {
 		        	if (title[0] != '('){
 		        		title = '(' + NEW_REQUESTS + ') ' + title;
 		        	} else {
 		        		title = title.replace(/\(\d+\)/, '(' + NEW_REQUESTS + ')');
 		        	};
 		        	$('title').text(title);
+		        } else {
+		        	NEW_REQUESTS = 0;
 		        };
 		    },
 		    dataType: "json"
 		});
-	}, 1000);
+	}, 3000);
 	$(window).focus(function(){
 		$('title').text('Last requests');
 		NEW_REQUESTS = 0;
+		FOCUSED = true;
+	}).blur(function(){
+		FOCUSED = false;
 	});
 })
