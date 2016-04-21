@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.test import TestCase
@@ -81,6 +82,7 @@ class ModelViewTests(TestCase):
     def test_index_displays_proper_person_model(self):
         """
         checks if correct instance of person model is shown in view
+        also checks if model accepts unicode
         """
         person = Person.objects.get(pk=1)
         old_name = person.first_name
@@ -91,3 +93,38 @@ class ModelViewTests(TestCase):
         response = self.client.get(reverse('index'))
         self.assertNotContains(response, old_name)
         self.assertContains(response, person.first_name)
+
+    def test_model_and_view_work_with_unicode(self):
+        """
+        fails if unicode characters are not handled
+        """
+        person = Person.objects.get(pk=1)
+        person.first_name = "Юникод"
+        person.save()
+        response = self.client.get(reverse('index'))
+        self.assertContains(response, person.first_name)
+
+    def test_index_does_not_display_attrs_of_deleted_person(self):
+        """
+        checks that if person is deleted, none of its attrs will be displayed
+        in index view
+        """
+        person = Person.objects.get(pk=1)
+        person.delete()
+        response = self.client.get(reverse('index'))
+        for key in PERSON:
+            self.assertNotContains(response, PERSON[key])
+
+    def test_index_displays_attrs_of_certain_instance(self):
+        """
+        checks if attrs of proper instance are displayed in index, if more
+        then one exists
+        """
+        person = Person.objects.get(pk=1)
+        old_name = person.first_name
+        person.pk = None
+        person.first_name = "New_name"
+        person.save()
+        response = self.client.get(reverse('index'))
+        self.assertContains(response, old_name)
+        self.assertNotContains(response, "New_name")

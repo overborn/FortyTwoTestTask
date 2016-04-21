@@ -7,7 +7,7 @@ urlpatterns = patterns(
     '',
     # Examples:
     # url(r'^$', 'fortytwo_test_task.views.home', name='home'),
-    url(r'^$', 't1_contact.views.index', name='index'),
+
     url("", include('t1_contact.urls')),
     url("", include('t3_requests.urls')),
 
