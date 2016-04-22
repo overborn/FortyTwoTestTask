@@ -34,10 +34,11 @@ class RequestSaverTests(TestCase):
         """
         for i in range(10):
             self.client.get('/path/', {'query': i})
+        self.client.get(reverse('index'))
         response = self.client.get(reverse('requests'))
         soup = BeautifulSoup(str(response), 'html.parser')
         for i, p in enumerate(soup.find_all('p')[1:], start=1):
-            self.assertIn('query={}'.format(10-i), p.string)
+            self.assertIn('query={}'.format(10 - i), p.string)
 
         self.assertNotIn('query=0', response)
         last_requests = Request.objects.order_by('-created')[:10]
