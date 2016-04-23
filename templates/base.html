@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load adminlinks %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -31,6 +32,11 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     {% if user.username %}
+                        {% if user.is_staff %}
+                            <li>
+                                {% edit_link user %}
+                            </li>
+                        {% endif %}
                         <li>
                             <a href="{% url 'logout' %}">logout({{user}})</a>
                         </li>

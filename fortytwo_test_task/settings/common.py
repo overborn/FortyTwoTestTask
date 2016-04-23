@@ -48,6 +48,7 @@ INSTALLED_APPS = (
     'apps.t1_contact',
     'apps.t3_requests',
     'apps.t5_edit',
+    'apps.t8_tag',
 )
 
 MIDDLEWARE_CLASSES = (
