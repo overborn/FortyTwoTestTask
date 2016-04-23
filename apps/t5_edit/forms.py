@@ -26,18 +26,32 @@ class PersonForm(ModelForm):
             'photo',
             HTML(PHOTO_HTML)
         )
-        div1 = ('first_name', 'last_name', 'date_of_birth', photo_layout)
-        div2 = ('email', 'skype', 'jabber', 'other_contacts', 'bio')
         self.helper.layout = Layout(
             Div(
-                Div(*div1, css_class='col-md-6 col-xs-12'),
-                Div(*div2, css_class='col-md-6 col-xs-12'),
+                Div('first_name', css_class='col-md-6 col-xs-12'),
+                Div('email', css_class='col-md-6 col-xs-12'),
+                css_class='row'
+            ),
+            Div(
+                Div('last_name', css_class='col-md-6 col-xs-12'),
+                Div('skype', css_class='col-md-6 col-xs-12'),
+                css_class='row'
+            ),
+            Div(
+                Div('date_of_birth', css_class='col-md-6 col-xs-12'),
+                Div('jabber', css_class='col-md-6 col-xs-12'),
+                css_class='row'
+            ),
+            Div(
+                Div(photo_layout, css_class='col-md-6 col-xs-12'),
+                Div('other_contacts', 'bio', css_class='col-md-6 col-xs-12'),
                 css_class='row'
             ),
             HTML('''
-                <input type="submit" class="btn btn-primary" value="Save">
-                <a href="{% url 'index' %}" class="btn btn-default">cancel</a>
-                ''')
+            <input type="submit" class="btn btn-primary" value="Save">
+            <a href="{% url 'index' %}" class="btn btn-default">cancel</a>
+            ''')
+
         )
-        self.helper.form_action = reverse('edit')
+        self.helper.form_action = reverse('ajax_save')
         self.helper.form_id = 'personForm'

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import tempfile
 import json
 from django.core.urlresolvers import reverse
@@ -99,7 +100,6 @@ class EditFormTests(TestCase):
         self.assertEqual(data['success'], False)
         self.assertIn('Enter a valid email address', data['form_html'])
         self.assertIn('This field is required', data['form_html'])
-        # print data['form_html']
 
     def test_edit_post_changes_data(self):
         """
