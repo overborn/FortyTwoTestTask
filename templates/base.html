@@ -29,6 +29,17 @@
                         <a href="{% url 'edit' %}">edit</a>
                     </li>
                 </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    {% if user.username %}
+                        <li>
+                            <a href="{% url 'logout' %}">logout({{user}})</a>
+                        </li>
+                    {% else %}
+                        <li class="active">
+                            <a href="{% url 'login' %}">login</a>
+                        </li>
+                    {% endif %}
+                </ul>
             </div>
             </div>
         </nav>
