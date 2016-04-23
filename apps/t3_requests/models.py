@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models import signals
+from t8_tag.signals import model_log_handler
 
 
 class Request(models.Model):
@@ -13,4 +15,7 @@ class Request(models.Model):
             self.method,
             self.path,
             self.query
-            )
+        )
+
+signals.post_save.connect(model_log_handler)
+signals.post_delete.connect(model_log_handler)

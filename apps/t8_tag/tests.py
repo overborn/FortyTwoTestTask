@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.core.urlresolvers import reverse
 from django.core.management import call_command
 from django.conf import settings
@@ -142,11 +143,11 @@ class ModelLoggingTests(TestCase):
         """
         checks if ModelLogEntry is created after save and delete actions
         """
-        self.assertEqual(ModelLogEntry.objects.count(), 0)
+        count = ModelLogEntry.objects.count()
         person = Person()
         person.save()
 
-        self.assertEqual(ModelLogEntry.objects.count(), 1)
+        self.assertEqual(ModelLogEntry.objects.count(), count + 1)
         entry = ModelLogEntry.objects.order_by('created').last()
         self.assertEqual(entry.action, 'CREATE')
         self.assertEqual(entry.model, 'Person')
@@ -154,14 +155,14 @@ class ModelLoggingTests(TestCase):
         person.last_name = 'Surname'
         person.save()
 
-        self.assertEqual(ModelLogEntry.objects.count(), 2)
+        self.assertEqual(ModelLogEntry.objects.count(), count + 2)
         entry = ModelLogEntry.objects.order_by('created').last()
         self.assertEqual(entry.action, 'UPDATE')
         self.assertEqual(entry.model, 'Person')
         self.assertEqual(entry.instance, 'Name Surname')
         person.delete()
 
-        self.assertEqual(ModelLogEntry.objects.count(), 3)
+        self.assertEqual(ModelLogEntry.objects.count(), count + 3)
         entry = ModelLogEntry.objects.order_by('created').last()
         self.assertEqual(entry.action, 'DELETE')
         self.assertEqual(entry.model, 'Person')

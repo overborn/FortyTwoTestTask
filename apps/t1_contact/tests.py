@@ -99,7 +99,7 @@ class ModelViewTests(TestCase):
         fails if unicode characters are not handled
         """
         person = Person.objects.get(pk=1)
-        person.first_name = "Юникод"
+        person.first_name = u"Юникод"
         person.save()
         response = self.client.get(reverse('index'))
         self.assertContains(response, person.first_name)
