@@ -1,7 +1,10 @@
+# -*- coding: utf-8 -*-
 import tempfile
+import json
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from t1_contact.models import Person
+from copy import copy
 
 PERSON = {
     "bio": """2015 - present: Programmer Analyst at Alfa Bank\r
@@ -22,7 +25,7 @@ class EditViewTests(TestCase):
     fixtures = ['initial_data.json']
 
     def setUp(self):
-        self.person = PERSON
+        self.person = copy(PERSON)
 
     def test_edit_view_renders_proper_template(self):
         """
@@ -47,7 +50,7 @@ class EditViewTests(TestCase):
 
 class EditFormTests(TestCase):
     def setUp(self):
-        self.person = PERSON
+        self.person = copy(PERSON)
 
     def test_edit_post_saves_and_redirects(self):
         """
@@ -58,6 +61,45 @@ class EditFormTests(TestCase):
         for field in self.person:
             self.assertEqual(self.person[field], str(getattr(person, field)))
         self.assertRedirects(response, reverse('index'))
+
+    def test_ajax_post_saves_person(self):
+        """
+        checks if ajax post saves person and returns {'success': True}
+        """
+        self.assertTrue(Person.objects.count(), 0)
+        response = self.client.post(reverse('ajax_save'), self.person)
+        person = Person.objects.get(pk=1)
+        for field in self.person:
+            self.assertEqual(self.person[field], str(getattr(person, field)))
+        data = json.loads(response.content)
+        self.assertEqual(data['success'], True)
+
+    def test_ajax_changes_person(self):
+        """
+        checks if ajax post changes person and returns {'success': True}
+        """
+        self.person['first_name'] = 'name'
+        response = self.client.post(reverse('ajax_save'), self.person)
+        person = Person.objects.get(pk=1)
+        for field in self.person:
+            self.assertEqual(self.person[field], str(getattr(person, field)))
+        data = json.loads(response.content)
+        self.assertEqual(data['success'], True)
+
+    def test_ajax_post_validate_broken_data(self):
+        """
+        checks if ajax post don't save broken data and returns form with errors
+        """
+        self.person['email'] = 'not_mail'
+        self.person['first_name'] = ''
+        response = self.client.post(reverse('ajax_save'), self.person)
+        person = Person.objects.get(pk=1)
+        self.assertNotEqual(self.person['email'], person.email)
+        self.assertNotEqual(self.person['first_name'], person.first_name)
+        data = json.loads(response.content)
+        self.assertEqual(data['success'], False)
+        self.assertIn('Enter a valid email address', data['form_html'])
+        self.assertIn('This field is required', data['form_html'])
 
     def test_edit_post_changes_data(self):
         """
@@ -88,7 +130,7 @@ class PhotoTests(TestCase):
     fixtures = ['initial_data.json']
 
     def setUp(self):
-        self.person = PERSON
+        self.person = copy(PERSON)
 
     def test_photo_is_rendered_when_added(self):
         """

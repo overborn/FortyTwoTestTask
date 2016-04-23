@@ -2,12 +2,18 @@
 {% load staticfiles %}
 {% load crispy_forms_tags %}
 {% block content %}
-
+<div class="alert alert-info" role="alert" style="display:none">saving...</div>
+<div class="alert alert-success alert-dismissible fade in" role="alert" style="display:none">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <strong>Form saved successfully.</strong> Go to <a href="{% url 'index' %}" class="alert-link">index</a>
+</div>
 
 {% crispy form %}
 
 {% endblock %}
 
 {% block scripts %}
-	<script src='{% static "js/datepicker.js" %}'></script>  
+	<script src='{% static "js/datepicker.js" %}'></script>
+	<script src='{% static "js/jquery.form.min.js" %}'></script>
+	<script src='{% static "js/editform.js" %}'></script>    
 {% endblock %}
