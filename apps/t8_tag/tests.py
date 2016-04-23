@@ -1,16 +1,12 @@
 # -*- coding: utf-8 -*-
 from django.core.urlresolvers import reverse
 from django.core.management import call_command
-from django.conf import settings
 from django.test import TestCase
 from django.test.utils import override_settings
 from django.template import Context, Template, TemplateSyntaxError
 from StringIO import StringIO
 from t1_contact.models import Person
 from t8_tag.models import ModelLogEntry
-import os
-import time
-import subprocess
 
 LINK_TO_ADMIN = '<a href="/admin/auth/user/1/">edit (admin)</a>'
 
@@ -117,22 +113,6 @@ class CommandTests(TestCase):
         self.assertIn(
             'error: model Person has {} instances'.format(count2),
             self.err.getvalue()
-        )
-
-    def test_script_creates_file_with_stderr_output(self):
-        """
-        checks if bash script creates file with output of printmodels command
-        """
-        script = os.path.join(settings.BASE_DIR, "printmodels.sh")
-        os.chmod(script, 0o755)
-        subprocess.call(script)
-        name = "{}.dat".format(time.strftime("%d-%m-%Y"))
-        name = os.path.join(settings.BASE_DIR, name)
-        self.assertTrue(os.path.isfile(name))
-        count = Person.objects.count()
-        self.assertIn(
-            'error: model Person has {} instances'.format(count),
-            open(name).read()
         )
 
 
