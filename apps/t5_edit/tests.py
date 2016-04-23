@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from t1_contact.models import Person
 from copy import copy
+import HTMLParser
 
 PERSON = {
     "bio": """2015 - present: Programmer Analyst at Alfa Bank\r
@@ -20,6 +21,8 @@ Taras Shevchenko National Univercity of Kyiv""",
     "email": "forkirill@i.ua"
 }
 
+AUTH_CREDS = {'username': 'admin', 'password': 'admin'}
+
 
 class EditViewTests(TestCase):
     fixtures = ['initial_data.json']
@@ -27,23 +30,26 @@ class EditViewTests(TestCase):
     def setUp(self):
         self.person = copy(PERSON)
 
-    def test_edit_view_renders_proper_template(self):
+    def test_edit_view_redirects_to_login_if_no_auth(self):
         """
         checks if template is correct
         """
-        response = self.client.get(reverse('edit'))
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed('edit.html')
+        response = self.client.get(reverse('edit'), follow=True)
+        self.assertRedirects(
+            response, '{}?next=/edit/'.format(reverse('login')))
+        self.assertTemplateUsed('login.html')
 
     def test_edit_view_contains_persons_data(self):
         """
         checks if edit view contains proper data
         """
-        response = self.client.get(reverse('index'))
+        self.client.login(**AUTH_CREDS)
+        response = self.client.get(reverse('edit'))
+        response_text = HTMLParser.HTMLParser().unescape(response.content)
         for key, value in self.person.iteritems():
             if '\r\n' in value:
                 for line in value.split('\r\n'):
-                    self.assertContains(response, line.strip(' \n\r'))
+                    self.assertIn(line.strip(' \n\r'), response_text)
             else:
                 self.assertContains(response, value)
 
@@ -51,6 +57,7 @@ class EditViewTests(TestCase):
 class EditFormTests(TestCase):
     def setUp(self):
         self.person = copy(PERSON)
+        self.client.login(**AUTH_CREDS)
 
     def test_edit_post_saves_and_redirects(self):
         """
@@ -103,7 +110,7 @@ class EditFormTests(TestCase):
 
     def test_edit_post_changes_data(self):
         """
-        checks if edit view changes model data
+        checks if edit changes model data
         """
         old_name = self.person["first_name"]
         self.person["first_name"] = "name"
@@ -120,6 +127,7 @@ class DatepickerTests(TestCase):
         """
         checks if static files for displaying datepicker are in view
         """
+        self.client.login(**AUTH_CREDS)
         response = self.client.get(reverse('edit'))
         self.assertContains(response, "js/jquery-ui.js")
         self.assertContains(response, "js/datepicker.js")
@@ -131,6 +139,7 @@ class PhotoTests(TestCase):
 
     def setUp(self):
         self.person = copy(PERSON)
+        self.client.login(**AUTH_CREDS)
 
     def test_photo_is_rendered_when_added(self):
         """
