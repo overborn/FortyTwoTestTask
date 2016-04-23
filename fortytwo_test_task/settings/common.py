@@ -139,4 +139,7 @@ SOUTH_TESTS_MIGRATE = False
 # Turn off to disable request saving
 ENABLE_REQUEST_SAVING = True
 
+# Turn off to disable model logging
+ENABLE_MODEL_LOGGING = True
+
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
