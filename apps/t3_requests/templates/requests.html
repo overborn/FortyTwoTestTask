@@ -4,7 +4,16 @@
 {% block title %}Last requests{% endblock title %}
 
 {% block content %}
+<div class="well">
 	<h3>Last requests</h3>
+	<p>Order by:</p>
+	<label class="radio-inline">
+	  <input type="radio" name="order" id="inlineRadio1" value="created" checked> created
+	</label>
+	<label class="radio-inline">
+	  <input type="radio" name="order" id="inlineRadio2" value="priority"> priority
+	</label>
+</div>
 	<div class="requests">
 		{% for req in requests %}
 			{# <p>{{ forloop.counter}}. [{{ req.created|date:"Y-m-d H:i:s" }}] {{ req.method }}: {{ req.path }} {{ req.query }}</p> #}
