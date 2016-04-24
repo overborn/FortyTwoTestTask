@@ -10,6 +10,7 @@ def requests(request, template='requests.html'):
 
 @json_view
 def ajax_requests(request):
-    requests = Request.objects.order_by('-created')[:10]
+    order = request.GET.get('order', None) or 'created'
+    requests = Request.objects.order_by('-' + order)[:10]
     requests = [{'id': r.id, 'string': str(r)} for r in requests]
     return {'requests': requests}

@@ -37,7 +37,8 @@ class RequestSaverTests(TestCase):
         self.client.get(reverse('index'))
         response = self.client.get(reverse('requests'))
         soup = BeautifulSoup(str(response), 'html.parser')
-        for i, p in enumerate(soup.find_all('p')[1:], start=1):
+        for i, p in enumerate(soup.find(
+                'div', class_='requests').find_all('p')[1:], start=1):
             self.assertIn('query={}'.format(10 - i), p.string)
 
         self.assertNotIn('query=0', response)
@@ -64,7 +65,7 @@ class RequestSaverTests(TestCase):
         )
         self.assertFalse(Request.objects.exists())
 
-    def test_ajax_request_returns_last_requests(self):
+    def test_ajax_request_initially_returns_last_requests(self):
         """
         checks if ajax request returns last requests
         """
@@ -76,5 +77,26 @@ class RequestSaverTests(TestCase):
         )
         data = json.loads(response.content)
         requests = Request.objects.order_by('-created')[:10]
+        for req, request in zip(requests, data['requests']):
+            self.assertEqual(request['string'], str(req))
+
+    def test_ajax_request_can_return_most_important_requests(self):
+        """
+        checks if ajax request returns most important requests if called with
+        order=priority param
+        """
+        Request.objects.bulk_create([
+            Request(method='GET', path='/', priority=10) for _ in range(10)
+        ])
+        Request.objects.bulk_create([
+            Request(method='GET', path='/recent') for _ in range(10)
+        ])
+        response = self.client.get(
+            reverse('ajax_requests') + '?order=priority',
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+        )
+        self.assertNotContains(response, '/recent')
+        data = json.loads(response.content)
+        requests = Request.objects.order_by('-priority')[:10]
         for req, request in zip(requests, data['requests']):
             self.assertEqual(request['string'], str(req))

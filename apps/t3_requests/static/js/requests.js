@@ -4,24 +4,35 @@ $(function(){
 	setInterval(function(){
 	    $.ajax({
 	    	url: "/ajax_requests",
+	    	data: {'order': $('[name="order"]:checked').val()},
 	    	success: function(data){
 		        $( data['requests'].reverse() ).each(function(index){
 		        	if ( $("input:hidden[value=" + this.id + "]").length > 0){
 		        		return true
 		        	} else {
 		        		NEW_REQUESTS += 1;
-		        		$('.requests').prepend(
-		        			"<p> 1. " + this.string + "</p>" + 
-		        			"<input type='hidden' value='" + this.id + "'/>"
-		        		);
-		        		$('p', '.requests').last().remove();
-		        		$('input', '.requests').last().remove();
+		        		// $('.requests').prepend(
+		        		// 	"<p> 1. " + this.string + "</p>" + 
+		        		// 	"<input type='hidden' value='" + this.id + "'/>"
+		        		// );
+		        		// if ($('p', '.requests').length >10 ){
+			        	// 	$('p', '.requests').last().remove();
+			        	// 	$('input', '.requests').last().remove();
+			        	// };
 		        	};
 		        });
-		        $('p', '.requests').each(function(index){
-		        	var text = $(this).text().replace(/^\d+/, index + 1);
-		        	$(this).text(text);
-		        });
+		        $('.requests').empty();
+				$( data['requests'].reverse() ).each(function(index){
+					$('.requests').append(
+		        			"<p> " + (index + 1) + ". " + this.string + "</p>" + 
+		        			"<input type='hidden' value='" + this.id + "'/>"
+		        		);
+				});
+		        // $('p', '.requests').each(function(index){
+		        // 	var text = $(this).text().replace(/^\d+/, index + 1);
+		        // 	// console.log(index, text)
+		        // 	$(this).text(text);
+		        // });
 		        var title = $('title').text();
 		        if (NEW_REQUESTS && !FOCUSED) {
 		        	if (title[0] != '('){
@@ -32,6 +43,7 @@ $(function(){
 		        	$('title').text(title);
 		        } else {
 		        	NEW_REQUESTS = 0;
+		        	$('title').text('Last requests');
 		        };
 		    },
 		    dataType: "json"
@@ -43,5 +55,23 @@ $(function(){
 		FOCUSED = true;
 	}).blur(function(){
 		FOCUSED = false;
+	});
+	$('[name="order"]').on('change', function(){
+		$.ajax({
+			url: "/ajax_requests",
+	    	data: {'order': $('[name="order"]:checked').val()},
+	    	success: function(data){
+				NEW_REQUESTS = 0;
+				FOCUSED = true;
+				$('.requests').empty();
+				$( data['requests'] ).each(function(index){
+					$('.requests').append(
+		        			"<p> " + (index + 1) + ". " + this.string + "</p>" + 
+		        			"<input type='hidden' value='" + this.id + "'/>"
+		        		);
+				});
+	    	},
+	    	dataType: "json"
+	    });
 	});
 })
