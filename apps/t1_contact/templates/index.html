@@ -3,63 +3,66 @@
 {% block title %}Coffee cups test assignment{% endblock title %}
 
 {% block content %}
-		{# <h3>42 Coffee Cups Test Assignment</h3> #}
-	   <div class="row">
-			<div class="col-md-2 col-xs-6">
-		      <label for="" class="">First name</label>
+		{% if person %}
+		   <div class="row">
+				<div class="col-md-2 col-xs-6">
+			      <label for="" class="">First name</label>
+			   </div>
+				<div class="col-md-4 col-xs-6">
+				   {{ person.first_name }}
+			   </div>
+				<div class="col-md-2 col-xs-6">
+			      <label for="" class="">Email</label>
+			   </div>
+				<div class="col-md-4 col-xs-6">
+				   {{ person.email }}
+			   </div>
 		   </div>
-			<div class="col-md-4 col-xs-6">
-			   {{ person.first_name }}
+		   <div class="row">
+				<div class="col-md-2 col-xs-6">
+			      <label for="" class="">Last name</label>
+			   </div>
+				<div class="col-md-4 col-xs-6">
+				   {{ person.last_name }}
+			   </div>
+				<div class="col-md-2 col-xs-6">
+			      <label for="" class="">Jabber</label>
+			   </div>
+				<div class="col-md-4 col-xs-6">
+				   {{ person.jabber }}
+			   </div>
 		   </div>
-			<div class="col-md-2 col-xs-6">
-		      <label for="" class="">Email</label>
+		   <div class="row">
+				<div class="col-md-2 col-xs-6">
+			      <label for="" class="">Date of birth</label>
+			   </div>
+				<div class="col-md-4 col-xs-6">
+				   {{ person.date_of_birth|date:"Y-m-d" }}
+			   </div>
+				<div class="col-md-2 col-xs-6">
+			      <label for="" class="">Skype</label>
+			   </div>
+				<div class="col-md-4 col-xs-6">
+				   {{ person.skype }}
+			   </div>
 		   </div>
-			<div class="col-md-4 col-xs-6">
-			   {{ person.email }}
+	   	   <div class="row">
+			   	<div class="col-md-6 col-xs-12">
+				   	<label for="" class="">Photo</label><br/>	
+				   	{% if person.photo %}		   			   		
+				   		<img src="{{ MEDIA_URL }}{{ person.photo }}"/>		   	
+				   	{% else %}
+					   	<p>No photo yet</p>
+				   	{% endif %}
+			   	</div>
+			   	<div class="col-md-6 col-xs-12">
+				   	<label for="" class="">Other contacts</label>
+				   	{{ person.other_contacts|linebreaks }}
+			   		<label for="" class="">Bio</label>
+			   		{{ person.bio|safe|linebreaks}}
+			   	</div>
 		   </div>
-	   </div>
-	   <div class="row">
-			<div class="col-md-2 col-xs-6">
-		      <label for="" class="">Last name</label>
-		   </div>
-			<div class="col-md-4 col-xs-6">
-			   {{ person.last_name }}
-		   </div>
-			<div class="col-md-2 col-xs-6">
-		      <label for="" class="">Jabber</label>
-		   </div>
-			<div class="col-md-4 col-xs-6">
-			   {{ person.jabber }}
-		   </div>
-	   </div>
-	   <div class="row">
-			<div class="col-md-2 col-xs-6">
-		      <label for="" class="">Date of birth</label>
-		   </div>
-			<div class="col-md-4 col-xs-6">
-			   {{ person.date_of_birth|date:"Y-m-d" }}
-		   </div>
-			<div class="col-md-2 col-xs-6">
-		      <label for="" class="">Skype</label>
-		   </div>
-			<div class="col-md-4 col-xs-6">
-			   {{ person.skype }}
-		   </div>
-	   </div>
-   	   <div class="row">
-		   	<div class="col-md-6 col-xs-12">
-			   	<label for="" class="">Photo</label><br/>	
-			   	{% if person.photo %}		   			   		
-			   		<img src="{{ MEDIA_URL }}{{ person.photo }}"/>		   	
-			   	{% else %}
-				   	<p>No photo yet</p>
-			   	{% endif %}
-		   	</div>
-		   	<div class="col-md-6 col-xs-12">
-			   	<label for="" class="">Other contacts</label>
-			   	{{ person.other_contacts|linebreaks }}
-		   		<label for="" class="">Bio</label>
-		   		{{ person.bio|safe|linebreaks}}
-		   	</div>
-	   </div>
+		{% else %}
+			<p class="lead">No person was found</p>
+		{% endif %}
 {% endblock content %}

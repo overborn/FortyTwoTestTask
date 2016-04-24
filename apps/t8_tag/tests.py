@@ -139,11 +139,11 @@ class ModelLoggingTests(TestCase):
         entry = ModelLogEntry.objects.order_by('created').last()
         self.assertEqual(entry.action, 'UPDATE')
         self.assertEqual(entry.model, 'Person')
-        self.assertEqual(entry.instance, 'Name Surname')
+        self.assertIn('Name Surname', entry.instance)
         person.delete()
 
         self.assertEqual(ModelLogEntry.objects.count(), count + 3)
         entry = ModelLogEntry.objects.order_by('created').last()
         self.assertEqual(entry.action, 'DELETE')
         self.assertEqual(entry.model, 'Person')
-        self.assertEqual(entry.instance, 'Name Surname')
+        self.assertIn('Name Surname', entry.instance)
