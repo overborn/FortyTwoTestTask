@@ -14,8 +14,10 @@ $(function(){
 		        			"<p> 1. " + this.string + "</p>" + 
 		        			"<input type='hidden' value='" + this.id + "'/>"
 		        		);
-		        		$('p', '.requests').last().remove();
-		        		$('input', '.requests').last().remove();
+		        		if ($('p', '.requests').length >10 ){
+			        		$('p', '.requests').last().remove();
+			        		$('input', '.requests').last().remove();
+			        	};
 		        	};
 		        });
 		        $('p', '.requests').each(function(index){
@@ -32,6 +34,7 @@ $(function(){
 		        	$('title').text(title);
 		        } else {
 		        	NEW_REQUESTS = 0;
+		        	$('title').text('Last requests');
 		        };
 		    },
 		    dataType: "json"

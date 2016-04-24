@@ -3,7 +3,7 @@
 {% block title %}Coffee cups test assignment{% endblock title %}
 
 {% block content %}
-		{# <h3>42 Coffee Cups Test Assignment</h3> #}
+	{% if person %}
 	   <div class="row">
 			<div class="col-md-2 col-xs-6">
 		      <label for="" class="">First name</label>
@@ -60,4 +60,7 @@
 			   {{ person.other_contacts|linebreaks }}
 		   </div>
 	   </div>
+	{% else %}
+		<p class="lead">No person was found</p>
+	{% endif %}
 {% endblock content %}

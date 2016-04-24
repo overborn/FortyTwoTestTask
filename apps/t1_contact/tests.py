@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from django.core.urlresolvers import reverse
-from django.contrib.auth.models import User
 from django.test import TestCase
 from t1_contact.models import Person
 
@@ -46,36 +45,6 @@ class ViewTests(TestCase):
                 self.assertContains(response, value)
 
 
-class AdminTests(TestCase):
-    fixtures = ['initial_data.json']
-
-    def test_admin_is_created_from_fixtures(self):
-        """
-        check if admin exists with admin:admin credentials
-        """
-        user = User.objects.get(pk=1)
-        self.assertTrue(user.is_superuser)
-        self.assertTrue(user.is_active)
-        self.assertTrue(user.is_staff)
-        self.assertEqual(user.username, 'admin')
-        self.assertTrue(user.check_password('admin'))
-
-
-class ModelTests(TestCase):
-    fixtures = ['initial_data.json']
-
-    def setUp(self):
-        self.person = PERSON
-
-    def test_person_is_created_from_fixures(self):
-        """
-        check if person with given contacts exists
-        """
-        person = Person.objects.get(pk=1)
-        for key, value in self.person.iteritems():
-            self.assertEqual(value, str(getattr(person, key)))
-
-
 class ModelViewTests(TestCase):
     fixtures = ['initial_data.json']
 
@@ -114,6 +83,7 @@ class ModelViewTests(TestCase):
         response = self.client.get(reverse('index'))
         for key in PERSON:
             self.assertNotContains(response, PERSON[key])
+        self.assertContains(response, "No person was found")
 
     def test_index_displays_attrs_of_certain_instance(self):
         """
