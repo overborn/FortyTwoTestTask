@@ -12,5 +12,4 @@ class Person(models.Model):
     other_contacts = models.TextField(null=True, blank=True)
 
     def __unicode__(self):
-        return "{} {} {} {}".format(
-            self.first_name, self.last_name, self.date_of_birth, self.email)
+        return u"{} {}".format(self.first_name, self.last_name)
