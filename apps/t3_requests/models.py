@@ -9,9 +9,11 @@ class Request(models.Model):
     path = models.CharField(max_length=256)
     query = models.CharField(max_length=256, blank=True, null=True)
     priority = models.IntegerField(default=1)
+    user = models.CharField(max_length=30, default='anonymous')
 
     def __unicode__(self):
-        return "[{0}] ({1}) {2}: {3} {4}".format(
+        return u"{}:  [{}] ({}) {}: {} {}".format(
+            self.user,
             self.created.strftime('%Y-%m-%d %H:%M:%S'),
             self.priority,
             self.method,

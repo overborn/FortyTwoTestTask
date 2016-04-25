@@ -11,14 +11,6 @@ $(function(){
 		        		return true
 		        	} else {
 		        		NEW_REQUESTS += 1;
-		        		// $('.requests').prepend(
-		        		// 	"<p> 1. " + this.string + "</p>" + 
-		        		// 	"<input type='hidden' value='" + this.id + "'/>"
-		        		// );
-		        		// if ($('p', '.requests').length >10 ){
-			        	// 	$('p', '.requests').last().remove();
-			        	// 	$('input', '.requests').last().remove();
-			        	// };
 		        	};
 		        });
 		        $('.requests').empty();
@@ -28,11 +20,6 @@ $(function(){
 		        			"<input type='hidden' value='" + this.id + "'/>"
 		        		);
 				});
-		        // $('p', '.requests').each(function(index){
-		        // 	var text = $(this).text().replace(/^\d+/, index + 1);
-		        // 	// console.log(index, text)
-		        // 	$(this).text(text);
-		        // });
 		        var title = $('title').text();
 		        if (NEW_REQUESTS && !FOCUSED) {
 		        	if (title[0] != '('){
