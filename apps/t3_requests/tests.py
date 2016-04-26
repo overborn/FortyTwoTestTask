@@ -56,11 +56,11 @@ class RequestSaverTests(TestCase):
 
     def test_ajax_request_for_last_requests_is_not_saved(self):
         """
-        checks if 'ajax_requests' ajax call is not saved
+        checks if 'requests' ajax call is not saved
         """
         self.assertFalse(Request.objects.exists())
         self.client.get(
-            reverse('ajax_requests'),
+            reverse('requests'),
             HTTP_X_REQUESTED_WITH='XMLHttpRequest'
         )
         self.assertFalse(Request.objects.exists())
@@ -72,7 +72,7 @@ class RequestSaverTests(TestCase):
         for i in range(10):
             self.client.get('/path/', {'query': i})
         response = self.client.get(
-            reverse('ajax_requests'),
+            reverse('requests'),
             HTTP_X_REQUESTED_WITH='XMLHttpRequest',
         )
         data = json.loads(response.content)
@@ -80,7 +80,7 @@ class RequestSaverTests(TestCase):
         for req, request in zip(requests, data['requests']):
             self.assertEqual(request['string'], str(req))
 
-    def test_ajax_request_can_return_most_important_requests(self):
+    def test_request_can_return_most_important_requests(self):
         """
         checks if ajax request returns most important requests if called with
         order=priority param
@@ -92,7 +92,7 @@ class RequestSaverTests(TestCase):
             Request(method='GET', path='/recent') for _ in range(10)
         ])
         response = self.client.get(
-            reverse('ajax_requests') + '?order=priority',
+            reverse('requests') + '?order=priority',
             HTTP_X_REQUESTED_WITH='XMLHttpRequest',
         )
         self.assertNotContains(response, '/recent')
