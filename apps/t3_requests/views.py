@@ -1,15 +1,16 @@
 from django.shortcuts import render
 from t3_requests.models import Request
 from jsonview.decorators import json_view
+import logging
 
-
-def requests(request, template='requests.html'):
-    last_requests = Request.objects.order_by('-created')[:10]
-    return render(request, template, {'requests': last_requests})
+logger = logging.getLogger(__name__)
 
 
 @json_view
-def ajax_requests(request):
+def requests(request, template='requests.html'):
     requests = Request.objects.order_by('-created')[:10]
-    requests = [{'id': r.id, 'string': str(r)} for r in requests]
-    return {'requests': requests}
+    logger.info(requests)
+    if request.is_ajax():
+        requests = [{'id': r.id, 'string': str(r)} for r in requests]
+        return {'requests': requests}
+    return render(request, template, {'requests': requests})

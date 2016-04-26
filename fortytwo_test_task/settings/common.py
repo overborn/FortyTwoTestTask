@@ -136,6 +136,9 @@ LOGGING = {
         't1_contact': {
             'handlers': ['console']
         },
+        't3_requests': {
+            'handlers': ['console']
+        },
     },
     'root': {'level': 'INFO'},
 }
@@ -158,3 +161,9 @@ SOUTH_TESTS_MIGRATE = False
 
 # Turn off to disable request saving
 ENABLE_REQUEST_SAVING = True
+
+# urls ignored by request saving
+IGNORE_URLS = (
+    '/ajax_requests/',
+    '/requests/'
+)
