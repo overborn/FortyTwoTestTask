@@ -55,11 +55,11 @@ class RequestSaverTests(TestCase):
 
     def test_ajax_request_for_last_requests_is_not_saved(self):
         """
-        checks if 'ajax_requests' ajax call is not saved
+        checks if 'requests' ajax call is not saved
         """
         self.assertFalse(Request.objects.exists())
         self.client.get(
-            reverse('ajax_requests'),
+            reverse('requests'),
             HTTP_X_REQUESTED_WITH='XMLHttpRequest'
         )
         self.assertFalse(Request.objects.exists())
@@ -71,7 +71,7 @@ class RequestSaverTests(TestCase):
         for i in range(10):
             self.client.get('/path/', {'query': i})
         response = self.client.get(
-            reverse('ajax_requests'),
+            reverse('requests'),
             HTTP_X_REQUESTED_WITH='XMLHttpRequest',
         )
         data = json.loads(response.content)

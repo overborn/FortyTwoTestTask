@@ -13,3 +13,6 @@ class Person(models.Model):
     other_contacts = models.TextField(null=True, blank=True)
     photo = ResizedImageField(
         size=[200, 200], upload_to='photo', null=True, blank=True)
+
+    def __unicode__(self):
+        return u"{} {}".format(self.first_name, self.last_name)
