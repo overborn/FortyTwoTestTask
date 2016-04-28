@@ -1,19 +1,25 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
-from t8_tag.models import ModelLogEntry
+from django.contrib.admin.models import LogEntry, ADDITION, CHANGE, DELETION
+from django.contrib.contenttypes.models import ContentType
+import logging
+
+logger = logging.getLogger(__name__)
 
 
-def model_log_handler(sender, **kwargs):
+def model_log_handler(sender, instance, **kwargs):
     if (not settings.ENABLE_MODEL_LOGGING or
-            sender._meta.object_name == 'ModelLogEntry'):
+            sender._meta.object_name in settings.MODEL_LOG_IGNORE):
         return
     if 'created' in kwargs:
-        action = "CREATE" if kwargs.get('created') else "UPDATE"
+        action = ADDITION if kwargs.get('created') else CHANGE
     else:
-        action = "DELETE"
-    entry = ModelLogEntry(
-        model=sender._meta.object_name,
-        instance=kwargs.get('instance'),
-        action=action
+        action = DELETION
+    LogEntry.objects.log_action(
+        user_id=1,
+        content_type_id=ContentType.objects.get_for_model(instance).id,
+        object_id=instance.id,
+        object_repr=unicode(instance),
+        action_flag=action
     )
-    entry.save()
+    logger.info(LogEntry.objects.order_by('action_time').last())

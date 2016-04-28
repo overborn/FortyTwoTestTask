@@ -4,22 +4,10 @@ import json
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from t1_contact.models import Person
+from t1_contact.tests import PERSON
 from copy import copy
 import HTMLParser
 
-PERSON = {
-    "bio": """2015 - present: Programmer Analyst at Alfa Bank\r
-2012 - 2015: Teacher of Economics at "Leader" lyceum\r
-2009 - 2013: Bachelor's degree in Economic Cybernetics at\r
-Taras Shevchenko National Univercity of Kyiv""",
-    "first_name": "Kyrylo",
-    "last_name": "Budko",
-    "other_contacts": "phone: +380937123775",
-    "date_of_birth": "1992-05-13",
-    "skype": "kyrylo.budko",
-    "jabber": "overborn@42cc.co",
-    "email": "forkirill@i.ua"
-}
 
 AUTH_CREDS = {'username': 'admin', 'password': 'admin'}
 
@@ -59,16 +47,6 @@ class EditFormTests(TestCase):
         self.person = copy(PERSON)
         self.client.login(**AUTH_CREDS)
 
-    def test_edit_post_saves_and_redirects(self):
-        """
-        checks if edit post request saves data and redirects to index
-        """
-        response = self.client.post(reverse('edit'), self.person, follow=True)
-        person = Person.objects.get(pk=1)
-        for field in self.person:
-            self.assertEqual(self.person[field], str(getattr(person, field)))
-        self.assertRedirects(response, reverse('index'))
-
     def test_ajax_post_saves_person(self):
         """
         checks if ajax post saves person and returns {'success': True}
@@ -107,17 +85,6 @@ class EditFormTests(TestCase):
         self.assertEqual(data['success'], False)
         self.assertIn('Enter a valid email address', data['form_html'])
         self.assertIn('This field is required', data['form_html'])
-
-    def test_edit_post_changes_data(self):
-        """
-        checks if edit changes model data
-        """
-        old_name = self.person["first_name"]
-        self.person["first_name"] = "name"
-        self.client.post(reverse('edit'), self.person, follow=True)
-        person = Person.objects.get(pk=1)
-        self.assertNotEqual(person.first_name, old_name)
-        self.assertEqual(person.first_name, "name")
 
 
 class DatepickerTests(TestCase):

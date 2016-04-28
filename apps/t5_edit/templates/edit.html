@@ -15,5 +15,9 @@
 {% block scripts %}
 	<script src='{% static "js/datepicker.js" %}'></script>
 	<script src='{% static "js/jquery.form.min.js" %}'></script>
+    {# {% include 'editform.html' %} #}
+    <script type="text/javascript">
+        var ajax_save_url = {% url 'ajax_save' %};
+    </script>>
 	<script src='{% static "js/editform.js" %}'></script>    
 {% endblock %}
