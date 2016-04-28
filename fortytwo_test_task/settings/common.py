@@ -142,6 +142,9 @@ LOGGING = {
         't3_requests': {
             'handlers': ['console']
         },
+        't5_edit': {
+            'handlers': ['console']
+        },
     },
     'root': {'level': 'INFO'},
 }
@@ -168,6 +171,6 @@ IGNORE_URLS = (
 )
 
 # Turn off to disable model logging
-ENABLE_MODEL_LOGGING = False
+ENABLE_MODEL_LOGGING = True
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
