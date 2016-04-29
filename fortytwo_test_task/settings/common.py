@@ -123,6 +123,34 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'assets'),
 )
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+        },
+        't1_contact': {
+            'handlers': ['console']
+        },
+        't3_requests': {
+            'handlers': ['console']
+        },
+        't5_edit': {
+            'handlers': ['console']
+        },
+        't8_tag': {
+            'handlers': ['console']
+        },
+    },
+    'root': {'level': 'INFO'},
+}
 
 # Template Settings
 TEMPLATE_DIRS = (
@@ -139,7 +167,19 @@ SOUTH_TESTS_MIGRATE = False
 # Turn off to disable request saving
 ENABLE_REQUEST_SAVING = True
 
+# urls ignored by request saving
+IGNORE_URLS = (
+    '/ajax_requests/',
+    '/requests/'
+)
+
 # Turn off to disable model logging
 ENABLE_MODEL_LOGGING = True
+
+# models which are not logged
+MODEL_LOG_IGNORE = (
+    'Session',
+    'LogEntry',
+)
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'

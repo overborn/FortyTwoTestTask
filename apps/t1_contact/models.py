@@ -17,7 +17,7 @@ class Person(models.Model):
         size=[200, 200], upload_to='photo', null=True, blank=True)
 
     def __unicode__(self):
-        return u"{0} {1}".format(self.first_name, self.last_name)
+        return u"{} {}".format(self.first_name, self.last_name)
 
 
 signals.post_save.connect(model_log_handler)
