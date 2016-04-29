@@ -39,12 +39,17 @@ class RequestSaverTests(TestCase):
         soup = BeautifulSoup(str(response), 'html.parser')
         for i, p in enumerate(soup.find(
                 'div', class_='requests').find_all('p')[1:], start=1):
-            self.assertIn('query={}'.format(10 - i), p.string)
+            self.assertIn('query={}'.format(10 - i), str(p))
 
         self.assertNotIn('query=0', response)
         last_requests = Request.objects.order_by('-created')[:10]
         for req in last_requests:
-            self.assertContains(response, str(req))
+            self.assertContains(response, req.id)
+            self.assertContains(response, req.user)
+            self.assertContains(response, req.path)
+            self.assertContains(response, req.method)
+            self.assertContains(response, req.created.strftime(
+                '%Y-%m-%d %H:%M:%S'))
 
     def test_https_requests_are_not_saved(self):
         """
@@ -78,7 +83,13 @@ class RequestSaverTests(TestCase):
         data = json.loads(response.content)
         requests = Request.objects.order_by('-created')[:10]
         for req, request in zip(requests, data['requests']):
-            self.assertEqual(request['string'], str(req))
+            self.assertEqual(request['id'], req.id)
+            self.assertEqual(request['method'], req.method)
+            self.assertEqual(request['user'], req.user)
+            self.assertEqual(request['path'], req.path)
+            self.assertEqual(request['query'], req.query)
+            self.assertEqual(request['created'], req.created.strftime(
+                '%Y-%m-%d %H:%M:%S'))
 
     def test_request_can_return_most_important_requests(self):
         """
@@ -99,4 +110,25 @@ class RequestSaverTests(TestCase):
         data = json.loads(response.content)
         requests = Request.objects.order_by('-priority')[:10]
         for req, request in zip(requests, data['requests']):
-            self.assertEqual(request['string'], str(req))
+            self.assertEqual(request['id'], req.id)
+            self.assertEqual(request['method'], req.method)
+            self.assertEqual(request['user'], req.user)
+            self.assertEqual(request['path'], req.path)
+            self.assertEqual(request['query'], req.query)
+            self.assertEqual(request['created'], req.created.strftime(
+                '%Y-%m-%d %H:%M:%S'))
+
+    def test_change_priority_call_changes_request(self):
+        """
+        checks if change_priority changes priority of given request
+        """
+        self.client.get('/path')
+        request = Request.objects.order_by('-created').last()
+        pk = request.id
+        priority = request.priority
+        self.client.post(
+            reverse('change_priority') + '?id={}&value=1'.format(pk),
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+        )
+        request = Request.objects.get(pk=pk)
+        self.assertEqual(request.priority, priority + 1)
