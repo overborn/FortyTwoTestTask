@@ -145,6 +145,9 @@ LOGGING = {
         't5_edit': {
             'handlers': ['console']
         },
+        't8_tag': {
+            'handlers': ['console']
+        },
     },
     'root': {'level': 'INFO'},
 }
@@ -172,5 +175,11 @@ IGNORE_URLS = (
 
 # Turn off to disable model logging
 ENABLE_MODEL_LOGGING = True
+
+# models which are not logged
+MODEL_LOG_IGNORE = (
+    'Session',
+    'LogEntry',
+)
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'

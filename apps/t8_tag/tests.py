@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 from django.core.urlresolvers import reverse
 from django.core.management import call_command
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.admin.models import LogEntry, ADDITION, CHANGE, DELETION
 from django.test import TestCase
 from django.test.utils import override_settings
 from django.template import Context, Template, TemplateSyntaxError
 from StringIO import StringIO
 from t1_contact.models import Person
-from t8_tag.models import ModelLogEntry
 
 LINK_TO_ADMIN = '<a href="/admin/auth/user/1/">edit (admin)</a>'
 
@@ -123,27 +124,36 @@ class ModelLoggingTests(TestCase):
         """
         checks if ModelLogEntry is created after save and delete actions
         """
-        count = ModelLogEntry.objects.count()
+        count = LogEntry.objects.count()
         person = Person()
         person.save()
 
-        self.assertEqual(ModelLogEntry.objects.count(), count + 1)
-        entry = ModelLogEntry.objects.order_by('created').last()
-        self.assertEqual(entry.action, 'CREATE')
-        self.assertEqual(entry.model, 'Person')
+        self.assertEqual(LogEntry.objects.count(), count + 1)
+        entry = LogEntry.objects.order_by('action_time').last()
+        self.assertEqual(entry.action_flag, ADDITION)
+        self.assertEqual(
+            entry.content_type_id,
+            ContentType.objects.get_for_model(Person).id
+        )
         person.first_name = 'Name'
         person.last_name = 'Surname'
         person.save()
 
-        self.assertEqual(ModelLogEntry.objects.count(), count + 2)
-        entry = ModelLogEntry.objects.order_by('created').last()
-        self.assertEqual(entry.action, 'UPDATE')
-        self.assertEqual(entry.model, 'Person')
-        self.assertIn('Name Surname', entry.instance)
+        self.assertEqual(LogEntry.objects.count(), count + 2)
+        entry = LogEntry.objects.order_by('action_time').last()
+        self.assertEqual(entry.action_flag, CHANGE)
+        self.assertEqual(
+            entry.content_type_id,
+            ContentType.objects.get_for_model(Person).id
+        )
+        self.assertEqual(entry.object_repr, 'Name Surname')
         person.delete()
 
-        self.assertEqual(ModelLogEntry.objects.count(), count + 3)
-        entry = ModelLogEntry.objects.order_by('created').last()
-        self.assertEqual(entry.action, 'DELETE')
-        self.assertEqual(entry.model, 'Person')
-        self.assertIn('Name Surname', entry.instance)
+        self.assertEqual(LogEntry.objects.count(), count + 3)
+        entry = LogEntry.objects.order_by('action_time').last()
+        self.assertEqual(entry.action_flag, DELETION)
+        self.assertEqual(
+            entry.content_type_id,
+            ContentType.objects.get_for_model(Person).id
+        )
+        self.assertEqual(entry.object_repr, 'Name Surname')

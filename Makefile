@@ -22,4 +22,8 @@ collectstatic:
 
 printmodels:
 	PYTHONPATH=`pwd` DJANGO_SETTINGS_MODULE=$(SETTINGS) $(MANAGE) printmodels
+
+writemodels:
+	./printmodels.sh
+
 .PHONY: test syncdb migrate

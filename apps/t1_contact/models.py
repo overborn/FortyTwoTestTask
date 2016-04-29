@@ -19,5 +19,6 @@ class Person(models.Model):
     def __unicode__(self):
         return u"{} {}".format(self.first_name, self.last_name)
 
+
 signals.post_save.connect(model_log_handler)
 signals.post_delete.connect(model_log_handler)
