@@ -1,5 +1,6 @@
-$(function(){
+// $(function(){
     var NEW_REQUESTS = 0,
+        CHANGED = false,
         FOCUSED = true;
     setInterval(function(){
         $.ajax({
@@ -13,12 +14,19 @@ $(function(){
                         NEW_REQUESTS += 1;
                     };
                 });
-                $('.requests').empty();
-                $( data['requests'].reverse() ).each(function(index){
-                    $('.requests').append(
-                        "<p data-object-id=" + this.id + ">" + (index + 1) + ". " + this.string + "</p>"
-                    );
-                });
+                if (NEW_REQUESTS || CHANGED){
+                    CHANGED = false;
+                    $('.requests').empty();
+                    $( data['requests'].reverse() ).each(function(index){
+                        $('.requests').append(
+                            "<p data-object-id=" + this.id + ">" + (index + 1) + ". priority: " + 
+                        '<button onclick="changePriority(this, -1)">-</button>' + 
+                        this.priority + '<button onclick="changePriority(this, 1)">+</button> ' + 
+                        this.created + ' ' + this.method + ' ' + this.path + ' ' + this.query + 
+                        ' by ' + this.user + "</p>"
+                        );
+                    });
+                }
                 var title = $('title').text();
                 if (NEW_REQUESTS && !FOCUSED) {
                     if (title[0] != '('){
@@ -52,11 +60,32 @@ $(function(){
                 $('.requests').empty();
                 $( data['requests'] ).each(function(index){
                     $('.requests').append(
-                        "<p data-object-id=" + this.id + ">" + (index + 1) + ". " + this.string + "</p>"
+                        "<p data-object-id=" + this.id + ">" + (index + 1) + ". priority: " + 
+                        '<button onclick="changePriority(this, -1)">-</button>' + 
+                        this.priority + '<button onclick="changePriority(this, 1)">+</button> ' + 
+                        this.created + ' ' + this.method + ' ' + this.path + ' ' + this.query + 
+                        ' by ' + this.user + "</p>"
                     );
                 });
             },
             dataType: "json"
         });
     });
-});
+// });
+function changePriority(elem, value){
+    var priority = $(elem).parent().get(0).childNodes[2].textContent;
+    if ( +priority + value > 9 || +priority + value < 1 ) {
+        return
+    }
+    $(elem).parent().get(0).childNodes[2].textContent = +priority + value
+    var id = $(elem).parent().attr('data-object-id');
+    $.ajax({
+        url: changePriorityUrl,
+        method: 'POST',
+        data: {id: id, value: value},
+        success: function(data){
+            CHANGED = true;
+        },
+        dataType: "json"
+    });
+}

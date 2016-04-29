@@ -2,29 +2,39 @@
 {% load staticfiles %}
 
 {% block title %}Last requests{% endblock title %}
+{% block extra_head %}
+	<link rel="stylesheet" href="{% static 'css/buttons.css' %}">
+{% endblock extra_head %}
 
 {% block content %}
 <div class="well">
-	<h3>Last requests</h3>
-	<p>Order by:</p>
-	<label class="radio-inline">
-	  <input type="radio" name="order" id="inlineRadio1" value="created" checked> created
-	</label>
-	<label class="radio-inline">
-	  <input type="radio" name="order" id="inlineRadio2" value="priority"> priority
-	</label>
+    <h3>Last requests</h3>
+    <p>Order by:</p>
+    <label class="radio-inline">
+      <input type="radio" name="order" id="inlineRadio1" value="created" checked> created
+    </label>
+    <label class="radio-inline">
+      <input type="radio" name="order" id="inlineRadio2" value="priority"> priority
+    </label>
 </div>
-	<div class="requests">
-		{% for req in requests %}
-			<p data-object-id="{{ req.id }}">{{ forloop.counter}}. {{ req }}</p>
-		{% endfor %}
-	</div>
+    <div class="requests">
+        {% for req in requests %}
+            <p data-object-id="{{ req.id }}">{{ forloop.counter }}. priority: 
+            <button onclick="changePriority(this, -1)">-</button>{{ req.priority }}
+            <button onclick="changePriority(this, 1)">+</button>  
+            {{ req.created|date:"Y-m-d H:i:s" }} {{ req.method }} {{ req.path }} {{ req.query }} 
+            by {{ req.user }}</p>
+        {% endfor %}
+    </div>
 
 {% endblock %}
 {% block footer %}
-	<a href="{% url 'index' %}">index</a>
+    <a href="{% url 'index' %}">index</a>
 {% endblock %}
 {% block scripts %}
 {{ block.super }}
-	<script src='{% static "js/requests.js" %}'></script>
+<script type="text/javascript">
+	var changePriorityUrl = {% url 'change_priority' %};
+</script>
+    <script src='{% static "js/requests.js" %}'></script>
 {% endblock %}
