@@ -76,14 +76,13 @@ function changePriority(elem, value){
     var priority = $(elem).parent().get(0).childNodes[2].textContent;
     if ( +priority + value > 9 || +priority + value < 1 ) {
         return
-    }
-    $(elem).parent().get(0).childNodes[2].textContent = +priority + value
+    }    
     var id = $(elem).parent().attr('data-object-id');
     $.ajax({
         url: changePriorityUrl,
-        method: 'POST',
         data: {id: id, value: value},
         success: function(data){
+            $(elem).parent().get(0).childNodes[2].textContent = +priority + value;
             CHANGED = true;
         },
         dataType: "json"
