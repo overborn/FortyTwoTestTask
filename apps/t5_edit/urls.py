@@ -9,5 +9,6 @@ urlpatterns = patterns(
     url(r'^ajax_save/', 't5_edit.views.ajax_save', name='ajax_save'),
     url(r'^accounts/login/$', 'django.contrib.auth.views.login',
         name='login'),
-    url(r'^logout/$', 't5_edit.views.logout_view', name='logout'),
+    url(r'^logout/$', 'django.contrib.auth.views.logout',
+        {'next_page': '/'}, name='logout')
 )
