@@ -45,6 +45,23 @@ class AdminLinksTests(TestCase):
             '{% edit_link %}'
         )
 
+    def test_admin_links_fails_if_used_with_inappropriate_object(self):
+        """
+        checks if AttributeError is raised if tag used with string or number
+        """
+        self.assertRaises(
+            AttributeError,
+            self.render_template,
+            '{% load adminlinks %}'
+            '{% edit_link "abc" %}'
+        )
+        self.assertRaises(
+            AttributeError,
+            self.render_template,
+            '{% load adminlinks %}'
+            '{% edit_link 123 %}'
+        )
+
     def test_link_is_shown_to_authenticated_users_only(self):
         """
         checks if link is displayed only to authenticated_users

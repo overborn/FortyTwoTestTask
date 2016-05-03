@@ -1,6 +1,5 @@
-from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.template import RequestContext
 from jsonview.decorators import json_view
 from crispy_forms.utils import render_crispy_form
@@ -36,8 +35,3 @@ def ajax_save(request):
     helper.form_tag = False
     html = render_crispy_form(form, context=request_context, helper=helper)
     return {'success': False, 'form_html': html}
-
-
-def logout_view(request):
-    logout(request)
-    return redirect('index')
